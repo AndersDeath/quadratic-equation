@@ -44,6 +44,18 @@
                 document.getElementById('numberAResult').innerHTML = e.target.value;
             })
 
+            document.getElementById('numberB').addEventListener('keyup', (e) => {
+                console.log(e.target.value)
+                document.getElementById('numberBResult').innerHTML = e.target.value > 0 ? '+'+e.target.value : e.target.value  ;
+            })
+
+            document.getElementById('numberC').addEventListener('keyup', (e) => {
+                console.log(e.target.value)
+                document.getElementById('numberCResult').innerHTML = e.target.value > 0 ? '+'+e.target.value : e.target.value  ;
+            })
+
+
+
         const discriminant = (a, b, c) => b * b - 4 * a * c;
         const getRoot1 = (a,b,d) => (-b + Math.sqrt(d)) / (2 * a);
         const getRoot2 = (a,b,d) => (-b - Math.sqrt(d)) / (2 * a);
@@ -70,7 +82,7 @@
             <div class="text-center">
               <div class="h1 fw-light">Quadratic equation </div>
               <p class="mb-4 text-muted">Simple script for queadratic equation calculation</p>
-              <p class="mb-4 text-muted"><span id="numberAResult"></span>X<sup>2</sup><span id="numberBResult"></span>X<sup>2</sup><span id="numberCResult"></span>X<sup>2</sup></p>
+              <p class="mb-4 text-muted"><span id="numberAResult"></span>X<sup>2</sup><span id="numberBResult"></span>X<span id="numberCResult"></span></p>
             </div>
 
             <form id="calculateForm">
