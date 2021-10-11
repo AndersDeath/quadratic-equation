@@ -10,8 +10,7 @@
     body {
       background-color: aqua;
       background-image: url('./bg.jpeg');
-      background-position: center;
-      background-size: cover;
+      background-size: cover  ;
     }
   </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css"
@@ -43,18 +42,16 @@
         const result = quadraticEquation(a, b, c);
         const discriminant = result[0];
 
-        console.log("Discriminant: " + discriminant);
+        document.getElementById('discriminant').innerHTML = `Discriminant: ${discriminant} <br>`
         if (discriminant < 0) {
-          console.log('No Roots');
+          document.getElementById('roots').innerHTML = 'No Roots';
         }
         if (discriminant === 0) {
-          console.log(`One root: ${result[1]}`);
+          document.getElementById('roots').innerHTML = `One root: ${result[1]}`
+
         }
-
         if (discriminant > 0) {
-          console.log(`Root 1: ${result[1]}`);
-          console.log(`Root 2: ${result[2]}`);
-
+          document.getElementById('roots').innerHTML = `Root 1: ${result[1]} <br>Root 2: ${result[2]}`;
         }
       });
 
@@ -122,6 +119,11 @@
                 <span id="numberCResult"></span>
                 <span id="equationEnd"></span>
               </p>
+              <p class="mb-4 text-muted">
+                <span id="discriminant"></span>
+                <span id="roots"></span>
+              </p>
+              <hr>
             </div>
 
             <form id="calculateForm">
