@@ -1,0 +1,5 @@
+body {
+    background-color: aqua;
+    background-image: url('./bg.jpeg');
+    background-size: cover  ;
+  }

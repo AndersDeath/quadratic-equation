@@ -1,0 +1,19 @@
+{
+  "name": "quadratic-equation",
+  "version": "1.0.0",
+  "description": "This is simple ui tool for calculation quadratic equations",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndersDeath/quadratic-equation.git"
+  },
+  "author": "Vladimir Bolshakov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AndersDeath/quadratic-equation/issues"
+  },
+  "homepage": "https://github.com/AndersDeath/quadratic-equation#readme"
+}
