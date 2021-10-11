@@ -1,80 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            background-color: aqua;
-            background-image: url('./bg.jpeg');
-            background-position: center;
-            background-size: cover;
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: aqua;
+      background-image: url('./bg.jpeg');
+      background-position: center;
+      background-size: cover;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css"
+    integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"
+    integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u"
+    crossorigin="anonymous"></script>
+  <script>
+
+    class Observer {
+      observers = [];
+      subscribe(fn) {
+        this.observers.push(fn);
+      }
+      unsubscribe(fn) {
+        this.observers = this.observers.filter(subscriber => subscriber !== fn); 
+      }
+      next(data) {
+        this.observers.forEach(subscriber => subscriber(data));
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new Observer();
+
+      document.getElementById('calculateButton').addEventListener('click', () => {
+        const a = document.getElementById('numberA').value;
+        const b = document.getElementById('numberB').value;
+        const c = document.getElementById('numberC').value;
+        const result = quadraticEquation(a, b, c);
+        const discriminant = result[0];
+
+        console.log("Discriminant: " + discriminant);
+        if (discriminant < 0) {
+          console.log('No Roots');
         }
-    </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js" integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('calculateButton').addEventListener('click', () => {
-                const a = document.getElementById('numberA').value;
-                const b = document.getElementById('numberB').value;
-                const c = document.getElementById('numberC').value;
-                const result = quadraticEquation(a, b, c);
-                const discriminant = result[0];
-
-                console.log("Discriminant: " + discriminant);
-                if(discriminant < 0) {
-                    console.log('No Roots');
-                }
-                if(discriminant === 0) {
-                    console.log(`One root: ${result[1]}`);
-                }
-
-                if(discriminant > 0) {
-                    console.log(`Root 1: ${result[1]}`);
-                    console.log(`Root 2: ${result[2]}`);
-
-                }
-            });
-
-            document.getElementById('numberA').addEventListener('keyup', (e) => {
-                console.log(e.target.value)
-                document.getElementById('numberAResult').innerHTML = e.target.value;
-            })
-
-            document.getElementById('numberB').addEventListener('keyup', (e) => {
-                console.log(e.target.value)
-                document.getElementById('numberBResult').innerHTML = e.target.value > 0 ? '+'+e.target.value : e.target.value  ;
-            })
-
-            document.getElementById('numberC').addEventListener('keyup', (e) => {
-                console.log(e.target.value)
-                document.getElementById('numberCResult').innerHTML = e.target.value > 0 ? '+'+e.target.value : e.target.value  ;
-            })
-
-
-
-        const discriminant = (a, b, c) => b * b - 4 * a * c;
-        const getRoot1 = (a,b,d) => (-b + Math.sqrt(d)) / (2 * a);
-        const getRoot2 = (a,b,d) => (-b - Math.sqrt(d)) / (2 * a);
-        function quadraticEquation(a, b, c) {
-            const d = discriminant(a, b, c);
-            if (d < 0) {
-                return [d];
-            }
-            const x1 = getRoot1(a,b,d);
-            const x2 = getRoot2(a,b,d);
-            return [d, x1, x2];
+        if (discriminant === 0) {
+          console.log(`One root: ${result[1]}`);
         }
- 
-        });
-    </script>
+
+        if (discriminant > 0) {
+          console.log(`Root 1: ${result[1]}`);
+          console.log(`Root 2: ${result[2]}`);
+
+        }
+      });
+
+      const viewData = {
+        a: null,
+        b: null,
+        c: null
+      }
+      document.getElementById('numberA').addEventListener('keyup', (e) => {
+        viewData.a = Number(e.target.value) || null;
+        observer.next(viewData);
+      });
+
+      document.getElementById('numberB').addEventListener('keyup', (e) => {
+        viewData.b = e.target.value || null;
+        observer.next(viewData);
+      });
+
+      document.getElementById('numberC').addEventListener('keyup', (e) => {
+        viewData.c = e.target.value || null;
+        observer.next(viewData);
+      });
+      observer.subscribe((e) => {
+        document.getElementById('numberAResult').innerHTML = e.a !== null ? e.a + '<i>x</i><sup>2</sup>' : '';
+        document.getElementById('numberBResult').innerHTML = e.b !== null ? e.b > 0 ? '+' + e.b + '<i>x</i>' : e.b + '<i>x</i>' : '';
+        document.getElementById('numberCResult').innerHTML = e.c > 0 ? '+' + e.c : e.c;
+        if(e.a !== null || e.b !== null || e.c !== null ) {
+          document.getElementById('equationEnd').innerHTML = '=0'
+        }
+        console.log('Subscription: ', e);
+      });
+
+
+
+      const discriminant = (a, b, c) => b * b - 4 * a * c;
+      const getRoot1 = (a, b, d) => (-b + Math.sqrt(d)) / (2 * a);
+      const getRoot2 = (a, b, d) => (-b - Math.sqrt(d)) / (2 * a);
+      function quadraticEquation(a, b, c) {
+        const d = discriminant(a, b, c);
+        if (d < 0) {
+          return [d];
+        }
+        const x1 = getRoot1(a, b, d);
+        const x2 = getRoot2(a, b, d);
+        return [d, x1, x2];
+      }
+
+    });
+  </script>
 </head>
+
 <body>
 
-<div class="container px-5 my-5">
+  <div class="container px-5 my-5">
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="card border-0 rounded-3 shadow-lg">
@@ -82,26 +116,31 @@
             <div class="text-center">
               <div class="h1 fw-light">Quadratic equation </div>
               <p class="mb-4 text-muted">Simple script for queadratic equation calculation</p>
-              <p class="mb-4 text-muted"><span id="numberAResult"></span>X<sup>2</sup><span id="numberBResult"></span>X<span id="numberCResult"></span></p>
+              <p class="mb-4 text-muted">
+                <span id="numberAResult"></span>
+                <span id="numberBResult"></span>
+                <span id="numberCResult"></span>
+                <span id="equationEnd"></span>
+              </p>
             </div>
 
             <form id="calculateForm">
-  
+
               <div class="form-floating mb-3">
-                <input class="form-control" id="numberA" type="number" placeholder="Number A"  />
+                <input class="form-control" id="numberA" type="number" placeholder="Number A" />
                 <label for="numberA">Number A</label>
               </div>
-  
+
               <div class="form-floating mb-3">
-                <input class="form-control" id="numberB" type="number" placeholder="Number B"  />
+                <input class="form-control" id="numberB" type="number" placeholder="Number B" />
                 <label for="numberB">Number B</label>
               </div>
-  
+
               <div class="form-floating mb-3">
-                <input class="form-control" id="numberC" type="number" placeholder="Number C"  />
+                <input class="form-control" id="numberC" type="number" placeholder="Number C" />
                 <label for="numberC">Number C</label>
               </div>
-  
+
               <div class="d-grid">
                 <button class="btn btn-primary btn-lg " id="calculateButton" type="button">Calculate</button>
               </div>
@@ -114,4 +153,5 @@
     </div>
   </div>
 </body>
+
 </html>
